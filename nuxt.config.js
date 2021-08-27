@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'blog',
+    title: 'Anna writes',
     htmlAttrs: {
       lang: 'en'
     },
@@ -19,12 +19,17 @@ export default {
     ]
   },
 
+  // Customize loading bar color
+  loading: { color: '#fa923f' },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~plugins/core-components.js',
+    '~plugins/date-filter.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -49,7 +54,15 @@ export default {
     '@nuxt/http'
   ],
 
+  http: {
+    baseURL: process.env.baseUrl || 'https://nuxt-blog-3d2f9-default-rtdb.europe-west1.firebasedatabase.app',
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+
+  env: {
+    firebaseKey: 'AIzaSyA5PvaLM6djaEHt8A7FhnXyjvTVqWGzGxc'
   }
 }

@@ -18,14 +18,14 @@ export default {
     }
   },
   async asyncData({ params, $http }) {
-    const rawPost = await $http.$get('https://nuxt-blog-3d2f9-default-rtdb.europe-west1.firebasedatabase.app/post/' + params.id + '.json')
+    const rawPost = await $http.$get('/post/' + params.id + '.json')
     const loadedPost = { ...rawPost, id: params.id }
     return { loadedPost }
   },
   methods: {
-    onSubmitted(editedPost) {
+    async onSubmitted(editedPost) {
       console.log(editedPost)
-      this.$store.dispatch('editPost', editedPost)
+      await this.$store.dispatch('editPost', editedPost)
       this.$router.push('/admin')
     }
   }

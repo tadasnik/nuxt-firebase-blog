@@ -1,4 +1,3 @@
-import axios from 'axios'
 export const state = () => ({
   loadedPosts: []
 })
@@ -19,16 +18,14 @@ export const mutations = {
 }
 
 export const actions = {
-  nuxtServerInit (vuexContext, context) {
-    return axios.get('https://nuxt-blog-3d2f9-default-rtdb.europe-west1.firebasedatabase.app/post.json')
-      .then(res => {
-        let postsArray = []
-        for (const key in res.data) {
-          console.log(key)
-          postsArray.push({ ...res.data[key], id: key })
-        }
-        vuexContext.commit('SET_POSTS', postsArray)
-      }).catch(e => context.error(e))
+  async nuxtServerInit (vuexContext, context) {
+    const data = await context.app.$http.$get('/post.json')
+    let postsArray = []
+    for (const key in data) {
+      console.log(key)
+      postsArray.push({ ...data[key], id: key })
+    }
+    vuexContext.commit('SET_POSTS', postsArray)
   },
 
   setPosts: ({ commit }, payload) => {
@@ -37,16 +34,15 @@ export const actions = {
 
   async addPost ({ commit }, payload) {
     const newPost = { ...payload, updatedDate: new Date() }
-    const postAction = await this.$http.$post('https://nuxt-blog-3d2f9-default-rtdb.europe-west1.firebasedatabase.app/post.json', newPost)
+    const postAction = await this.$http.$post('/post.json', newPost)
     commit('ADD_POST', { ...newPost, id: postAction.name })
     return
   },
 
-  async editPost ({ commit }, payload) {
+  editPost ({ commit }, payload) {
     console.log('editPost action', payload.id)
-    await this.$http.put('https://nuxt-blog-3d2f9-default-rtdb.europe-west1.firebasedatabase.app/post/' + payload.id + '.json', payload)
+    this.$http.put('/post/' + payload.id + '.json', payload)
     commit('EDIT_POST', payload)
-    return
   }
 }
 

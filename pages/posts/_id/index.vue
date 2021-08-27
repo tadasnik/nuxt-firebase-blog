@@ -3,7 +3,7 @@
     <section class="post">
       <h1 class="post-title">{{ loadedPost.title }}</h1>
       <div class="post-details">
-        <div class="post-details">Last updated {{ loadedPost.updatedDate }}</div>
+        <div class="post-details">Last updated {{ loadedPost.updatedDate | date }}</div>
         <div class="post-details">Written by {{ loadedPost.author }}</div>
       </div>
       <p class="post-content">{{ loadedPost.content }}</p>
@@ -19,7 +19,7 @@ export default {
   data () {
   },
   async asyncData({ params, $http }) {
-    const loadedPost = await $http.$get('https://nuxt-blog-3d2f9-default-rtdb.europe-west1.firebasedatabase.app/post/' + params.id + '.json')
+    const loadedPost = await $http.$get('/post/' + params.id + '.json')
 
     console.log(loadedPost)
     return { loadedPost }
