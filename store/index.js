@@ -28,6 +28,7 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit (vuexContext, context) {
+    console.log(context.app.$http._defaults.prefixUrl)
     const data = await context.app.$http.$get('/post.json')
     let postsArray = []
     for (const key in data) {
