@@ -1,3 +1,4 @@
+import axios from 'axios'
 export const state = () => ({
   loadedPosts: [],
   token: null
@@ -28,14 +29,22 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit (vuexContext, context) {
-    console.log(context.app.$http._defaults.prefixUrl)
-    const data = await context.app.$http.$get('/post.json')
-    let postsArray = []
-    for (const key in data) {
-      console.log(key)
-      postsArray.push({ ...data[key], id: key })
-    }
+    return axios.get('https://nuxt-blog-3d2f9-default-rtdb.europe-west1.firebasedatabase.app/post.json')
+    .then(res => {
+      const postsArray = []
+      for (const key in res.data) {
+        postsArray.push({ ...res.data[key], id: key })
+      }
     vuexContext.commit('SET_POSTS', postsArray)
+    })
+    .catch(e => context.error(e))
+    // const data = await context.app.$http.$get('/post.json')
+    // let postsArray = []
+    // for (const key in data) {
+    //  console.log(key)
+    //  postsArray.push({ ...data[key], id: key })
+    // }
+    // vuexContext.commit('SET_POSTS', postsArray)
   },
 
   setPosts: ({ commit }, payload) => {
