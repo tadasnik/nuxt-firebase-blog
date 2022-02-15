@@ -28,21 +28,12 @@ export default {
   },
   methods: {
     async onSubmit () {
-      let authUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + process.env.firebaseKey
-      if (!this.isLogin) {
-        authUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + process.env.firebaseKey
-      }
-      try {
-        const result = await this.$http
-          .$post(authUrl, {
-            email: this.email,
-            password: this.password,
-            returnSecureToken: true
-          })
-          console.log(result)
-      } catch(e) {
-        console.log(e)
-      }
+      await this.$store.dispatch('authenticateUser', {
+        isLogin: this.isLogin,
+        email: this.email,
+        password: this.password,
+      })
+      this.$router.push('/admin')
     }
   },
 }
